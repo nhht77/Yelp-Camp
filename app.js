@@ -2,21 +2,13 @@ const express    = require("express"),
       app        = express(),
       bodyParser = require("body-parser"),
       mongoose   = require('mongoose'),
-      PORT       = 3000;
+      PORT       = 3000,
+      Campground = require("./models/campground");
 
 // CONFIG
 mongoose.connect('mongodb://localhost:27017/Yelpcamp', { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// SCHEMA SETUP
-const campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-const Campground = mongoose.model("Campground", campgroundSchema);
 
 // Campground.create({
 //     name: "Yosemite Valley",
