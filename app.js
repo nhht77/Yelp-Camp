@@ -3,12 +3,14 @@ const express    = require("express"),
       bodyParser = require("body-parser"),
       mongoose   = require('mongoose'),
       PORT       = 3000,
-      Campground = require("./models/campground");
+      Campground = require("./models/campground"),
+      seedDB      = require("./seeds");
 
 // CONFIG
 mongoose.connect('mongodb://localhost:27017/Yelpcamp', { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+seedDB()
 
 // Campground.create({
 //     name: "Yosemite Valley",
