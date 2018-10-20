@@ -12,14 +12,16 @@ app.set("view engine", "ejs");
 // SCHEMA SETUP
 const campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
 const Campground = mongoose.model("Campground", campgroundSchema);
 
 // Campground.create({
 //     name: "Yosemite Valley",
-//     image: "https://images.unsplash.com/photo-1465695954255-a262b0f57b40?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=06d92f647a2937af54f658e199c3d990&auto=format&fit=crop&w=1050&q=80"
+//     image: "https://images.unsplash.com/photo-1465695954255-a262b0f57b40?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=06d92f647a2937af54f658e199c3d990&auto=format&fit=crop&w=1050&q=80",
+//     description: "Glacial valley in Yosemite National Park, no water and bathroom"
 // }, function(error, campground) {
 //     if (error) {
 //         console.log(error);
@@ -33,13 +35,13 @@ app.get("/", (req, res) => {
     res.render("landing");
 });
 
-//GET ALL : API/CAMPGROUNDS
+//GET ALL : API/Index
 app.get("/campgrounds", (req, res) => {
     Campground.find({}, (err, allCampground) => {
         if (err) {
             console.log(err);
         } else {
-            res. render("campgrounds", {campgrounds : allCampground});
+            res. render("index", {campgrounds : allCampground});
         }
     })
 });
@@ -49,7 +51,8 @@ app.post("/campgrounds", (req, res) => {
     // get data from form and add to campgrounds db
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground = {name: name, image: image};
+    var description = req.body.description;
+    var newCampground = {name: name, image: image, description: description};
 
     Campground.create( newCampground, err => {
         if(err){
@@ -61,9 +64,21 @@ app.post("/campgrounds", (req, res) => {
     
 });
 
+//GET : API/NEW
 app.get("/campgrounds/new", (req, res) => {
-   res.render("new.ejs"); 
-});
+    res.render("new"); 
+ });
+
+ //GET : API/CAMPGROUNDS/:ID
+app.get("/campgrounds/:id", (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.render("show", {campground: foundCampground});
+        }
+    });
+})
 
 app.listen(PORT, () => {
    console.log("The YelpCamp Server Has Started On Port 3000!");
