@@ -4,26 +4,14 @@ const express    = require("express"),
       mongoose   = require('mongoose'),
       PORT       = 3000,
       Campground = require("./models/campground"),
-      seedDB      = require("./seeds");
+      Comment    = require("./models/comment"),
+      seedDB     = require("./seeds");
 
 // CONFIG
 mongoose.connect('mongodb://localhost:27017/Yelpcamp', { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-seedDB()
-
-// Campground.create({
-//     name: "Yosemite Valley",
-//     image: "https://images.unsplash.com/photo-1465695954255-a262b0f57b40?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=06d92f647a2937af54f658e199c3d990&auto=format&fit=crop&w=1050&q=80",
-//     description: "Glacial valley in Yosemite National Park, no water and bathroom"
-// }, function(error, campground) {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         console.log("NEWLY CREATED CAMPGROUND: ");
-//         console.log(campground);
-//     }
-// });
+// seedDB();
     
 app.get("/", (req, res) => {
     res.render("landing");
@@ -63,12 +51,13 @@ app.get("/campgrounds/new", (req, res) => {
     res.render("new"); 
  });
 
- //GET : API/CAMPGROUNDS/:ID
+ //SHOW : API/CAMPGROUNDS/:ID
 app.get("/campgrounds/:id", (req, res) => {
-    Campground.findById(req.params.id, (err, foundCampground) => {
+    Campground.findById(req.params.id).populate("comments").exec( (err, foundCampground) => {
         if(err){
             console.log(err);
         }else{
+            console.log(foundCampground);
             res.render("show", {campground: foundCampground});
         }
     });

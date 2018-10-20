@@ -1,5 +1,6 @@
 const mongoose   = require("mongoose"),
-      campground = require("./models/campground");
+      Campground = require("./models/campground"),
+      Comment    = require("./models/comment");
 
       let data = [
         {
@@ -21,23 +22,44 @@ const mongoose   = require("mongoose"),
 
 function seedDB() {
     // REMOVE ALL THE CAMPGROUND
-    campground.remove({}, err => {
+    Campground.remove({}, err => {
         if(err){
             console.log(err);
         } else {
             console.log("Remove Campgrounds");
-
-    // ADD A FEW CAMPGROUND        
+            // REMOVE COMMENT
+            Comment.remove({}, err => {
+                if(err){
+                    console.log(err);
+                } else {
+            console.log("Remove Comments");
+            // ADD A FEW CAMPGROUND        
             data.forEach((seed) => {
-                campground.create(seed, (err, campground) => {
+                Campground.create(seed, (err, campground) => {
                     if(err){
                         console.log(err);
                     }
                     else{
                         console.log("Campground Added");
+                        // CREATE COMMENTS
+                        Comment.create({
+                            text: "This place is great get-away from the IT Society",
+                            author: "John Smith"
+                        }, (err, comment) => {
+                            if(err){
+                                console.log(err);
+                            }else {
+                                campground.comments.push(comment);
+                                campground.save();
+                                console.log("Created new comment");
+                            }
+                        })
                     }
                 })
             })
+                }
+            })
+    
         }
     })
 }
