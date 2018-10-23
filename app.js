@@ -17,13 +17,15 @@ app.get("/", (req, res) => {
     res.render("landing");
 });
 
+// CAMPGROUNDS ROUTE //
+
 //GET ALL : API/Index
 app.get("/campgrounds", (req, res) => {
     Campground.find({}, (err, allCampground) => {
         if (err) {
             console.log(err);
         } else {
-            res. render("index", {campgrounds : allCampground});
+            res. render("campgrounds/index", {campgrounds : allCampground});
         }
     })
 });
@@ -48,7 +50,7 @@ app.post("/campgrounds", (req, res) => {
 
 //GET : API/NEW
 app.get("/campgrounds/new", (req, res) => {
-    res.render("new"); 
+    res.render("campgrounds/new"); 
  });
 
  //SHOW : API/CAMPGROUNDS/:ID
@@ -58,10 +60,12 @@ app.get("/campgrounds/:id", (req, res) => {
             console.log(err);
         }else{
             console.log(foundCampground);
-            res.render("show", {campground: foundCampground});
+            res.render("campgrounds/show", {campground: foundCampground});
         }
     });
 })
+
+// COMMENT ROUTE //
 
 app.listen(PORT, () => {
    console.log("The YelpCamp Server Has Started On Port 3000!");
