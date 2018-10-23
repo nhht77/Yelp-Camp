@@ -1,21 +1,56 @@
 <% include ../partials/header %>
-<h1><%=campground.name%></h1>
+<div class="mt-5 container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">YelpCamp</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info 1</li>
+                <li class="list-group-item">Info 2</li>
+                <li class="list-group-item">Info 3</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+        <div class="card mb-3">
+        <img class="card-img-top" src="<%= campground.image %>" alt="<%= campground.name %>">
+        <div class="card-body">
+          <p class="float-right">
+            $99.9/night
+          </p>
+          <h5 class="card-title"><%= campground.name %></h5>
+          <p>
+            <em>Submitted by: Gordon</em>
+          </p>
+          <hr>
+          <p class="card-text"><%= campground.description %></p>
+          
+        </div>
+      </div>
+  
 
-<img src="<%= campground.image %>">
 
-<p><%= campground.description %></p>
+      <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+          <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
+        </div>
+                <hr>
+                <% campground.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author %></strong>
+                            <span class="pull-right">10 days ago</span>
+                            <p>
+                                <%= comment.text %> 
+                            </p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
 
+        </div>
+    </div>    
+</div>
 
-<p>
-    <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
-</p>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addComment" data-whatever="@fat">Add Comment</button>
-
-<% campground.comments.forEach(function(comment){ %>
-    <p>
-        <strong><%= comment.author %></strong> - <%= comment.text %>
-    </p>
-<% }) %>
 <% include ../partials/footer %>
 
 
