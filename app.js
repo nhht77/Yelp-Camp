@@ -119,7 +119,7 @@ app.post("/campgrounds/:id/comments", (req, res) => {
 // AUTH ROUTE // 
 
 // GET API/register
-app.use('/register', (req, res) => {
+app.get('/register', (req, res) => {
     res.render('register');
 })
 
@@ -136,6 +136,15 @@ app.post("/register", function(req, res){
            res.redirect("/campgrounds"); 
         });
     });
+});
+
+//GET API/login
+app.get("/login", (req, res) => {
+    res.render('login');
+})
+
+// POST API/login
+app.post("/login", passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/campgrounds' }) ,(req, res) =>{
 });
 
 app.listen(PORT, () => {
