@@ -1,11 +1,14 @@
-const express    = require("express"),
-      app        = express(),
-      bodyParser = require("body-parser"),
-      mongoose   = require('mongoose'),
-      PORT       = 3000,
-      Campground = require("./models/campground"),
-      Comment    = require("./models/comment"),
-      seedDB     = require("./seeds");
+const express       = require("express"),
+      app           = express(),
+      bodyParser    = require("body-parser"),
+      mongoose      = require('mongoose'),
+      PORT          = 3000,
+      passport      = require("passport"),
+      localStrategy = require("passport-local"),
+      User          = require("./models/user");
+      Campground    = require("./models/campground"),
+      Comment       = require("./models/comment"),
+      seedDB        = require("./seeds");
 
 // CONFIG
 mongoose.connect('mongodb://localhost:27017/Yelpcamp', { useNewUrlParser: true });
