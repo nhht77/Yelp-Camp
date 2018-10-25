@@ -67,9 +67,9 @@ app.get("/campgrounds/:id", (req, res) => {
 
 // COMMENT ROUTE //
 
-app.get("/campgrounds/:id/comments/new", function(req, res){
+app.get("/campgrounds/:id/comments/new", (req, res) => {
     // find campground by id
-    Campground.findById(req.params.id, function(err, campground){
+    Campground.findById(req.params.id, (err, campground) => {
         if(err){
             console.log(err);
         } else {
