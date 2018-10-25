@@ -29,6 +29,11 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+})
+
 app.get("/", (req, res) => {
     res.render("landing");
 });
@@ -148,7 +153,7 @@ app.post("/login", passport.authenticate('local', { failureRedirect: '/login', s
 });
 
 // Logout Logic
-app.get("logout", (req, res) => {
+app.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/");
 })

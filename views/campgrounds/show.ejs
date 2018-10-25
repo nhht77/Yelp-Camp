@@ -31,7 +31,9 @@
       <div class="card">
       <div class="card-body">
         <div class="text-right">
+        <% if(currentUser){ %>
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#addComment" data-whatever="@fat">Comments On!!!</button>
+        <% } %>
         </div>
                 <hr>
                 <% campground.comments.forEach((comment) => { %>
