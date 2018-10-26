@@ -15,12 +15,16 @@ router.get("/campgrounds", (req, res) => {
 });
 
 //POST : API/CAMPGROUNDS
-router.post("/campgrounds", (req, res) => {
+router.post("/campgrounds", isLoggedIn, (req, res) => {
     // get data from form and add to campgrounds db
     var name = req.body.name;
-    var image = req.body.image;
-    var description = req.body.description;
-    var newCampground = {name: name, image: image, description: description};
+        image = req.body.image,
+        description = req.body.description,
+        author = {
+            id: req.user._id,
+            username: req.user.username
+        },
+        newCampground = {name: name, image: image, description: description, author: author};
 
     Campground.create( newCampground, err => {
         if(err){
@@ -31,11 +35,6 @@ router.post("/campgrounds", (req, res) => {
     })
     
 });
-
-//GET : API/NEW
-router.get("/campgrounds/new", (req, res) => {
-    res.render("campgrounds/new"); 
- });
 
  //SHOW : API/CAMPGROUNDS/:ID
 router.get("/campgrounds/:id", (req, res) => {
