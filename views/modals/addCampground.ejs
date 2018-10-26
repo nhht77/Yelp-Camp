@@ -1,0 +1,32 @@
+<div class="modal fade" id="addCampground">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form action="/campgrounds" method="POST">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a New Campground</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="campground-name" class="col-form-label">Name:</label>
+            <input class="form-control" name="name" id="campground-name"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="campground-image" class="col-form-label">Image:</label>
+            <input class="form-control" name="image" id="campground-imaget"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="campground-description" class="col-form-label">Description:</label>
+            <input class="form-control" name="description" id="campground-description"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Send</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

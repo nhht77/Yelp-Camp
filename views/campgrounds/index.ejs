@@ -5,7 +5,7 @@
              <h1>Welcome To YelpCamp!</h1>
              <p>View our hand-picked campgrounds from all over the world</p>
              <p>
-                <a class="btn btn-primary btn-large" href="/campgrounds/new">Add New Campground</a>
+                <button type="button" class="btn btn-primary btn-large" data-toggle="modal" data-target="#addCampground">Add New Campground</button>
              </p>
          </div>
      </header>
@@ -33,3 +33,4 @@
 </div>
 
 <% include ../partials/footer %>
+<% include ../modals/addCampground.ejs %>
