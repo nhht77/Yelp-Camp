@@ -25,10 +25,13 @@ router.post("/campgrounds/:id/comments", isLoggedIn ,(req, res) => {
                if(err){
                    console.log(err);
                }else {
-                //CONNECT NEW COMMENT TO CAMPGROUNDS
+                //add username and id to comment
+                comment.author.id = req.user._id;
+                comment.author.username = req.user.username;
+                //save comment
+                comment.save();
                 campground.comments.push(comment);
                 campground.save();
-                //REDIRECT CAMPGROUND TO SHOW PAGE
                 res.redirect('/campgrounds/' + campground._id);
                }
            })
