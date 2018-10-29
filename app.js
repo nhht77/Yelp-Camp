@@ -42,9 +42,9 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(indexRoute);
-app.use(campgroundRoute);
-app.use(commentRoute);
+app.use("/", indexRoute);
+app.use("/campgrounds", campgroundRoute);
+app.use("/campgrounds/:id/comments", commentRoute);
 
 app.listen(PORT, () => {
    console.log("The YelpCamp Server Has Started On Port 3000!");

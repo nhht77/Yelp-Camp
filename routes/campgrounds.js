@@ -4,7 +4,7 @@ const router        = require('express').Router(),
 // CAMPGROUNDS ROUTE //
 
 //GET ALL : API/Index
-router.get("/campgrounds", (req, res) => {
+router.get("/", (req, res) => {
     Campground.find({}, (err, allCampground) => {
         if (err) {
             console.log(err);
@@ -15,7 +15,7 @@ router.get("/campgrounds", (req, res) => {
 });
 
 //POST : API/CAMPGROUNDS
-router.post("/campgrounds", isLoggedIn, (req, res) => {
+router.post("/", isLoggedIn, (req, res) => {
     // get data from form and add to campgrounds db
     var name = req.body.name;
         image = req.body.image,
@@ -37,7 +37,7 @@ router.post("/campgrounds", isLoggedIn, (req, res) => {
 });
 
  //SHOW : API/CAMPGROUNDS/:ID
-router.get("/campgrounds/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     Campground.findById(req.params.id).populate("comments").exec( (err, foundCampground) => {
         if(err){
             console.log(err);
@@ -48,7 +48,7 @@ router.get("/campgrounds/:id", (req, res) => {
 });
 
 // PUT : API/CAMPGROUNDS/:ID
-router.put("/campgrounds/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
         if(err){
             res.redirect("/campgrounds");
@@ -58,7 +58,7 @@ router.put("/campgrounds/:id", (req, res) => {
     })
 })
 
-router.delete("/campgrounds/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     Campground.findByIdAndRemove(req.params.id, (err) => {
         if(err){
             res.redirect("/");

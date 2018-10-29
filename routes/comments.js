@@ -1,8 +1,8 @@
-const router        = require('express').Router(),
-      Comment    = require('../models/comment'),
-      Campground = require('../models/campground');
+const router        = require('express').Router({mergeParams: true}),
+      Comment       = require('../models/comment'),
+      Campground    = require('../models/campground');
 
-router.post("/campgrounds/:id/comments", isLoggedIn ,(req, res) => {
+router.post("/", isLoggedIn ,(req, res) => {
     //LOOK UP CAMPGROUNDS BY ID
     Campground.findById(req.params.id, (err, campground) => {
         if(err){
