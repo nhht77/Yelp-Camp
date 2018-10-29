@@ -22,7 +22,9 @@
           </p>
           <hr>
           <p class="card-text"><%= campground.description %></p>
-          
+          <% if(currentUser){ %>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCampground">Edit</button>
+          <% } %>
         </div>
       </div>
   
@@ -55,4 +57,4 @@
 
 <% include ../partials/footer %>
 <% include ../modals/addComment %>
-
+<% include ../modals/editCampground %>
