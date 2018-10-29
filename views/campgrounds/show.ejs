@@ -23,7 +23,10 @@
           <hr>
           <p class="card-text"><%= campground.description %></p>
           <% if(currentUser){ %>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCampground">Edit</button>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editCampground">Edit</button>
+            <form action="/campgrounds/<%= campground._id %>/?_method=DELETE"  method="POST" class="d-inline"> 
+                <button class="btn btn-danger">Delete</button>
+            </form>
           <% } %>
         </div>
       </div>
