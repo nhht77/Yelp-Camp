@@ -16,14 +16,14 @@ router.get('/register', (req, res) => {
 })
 
 // POST API/register --- HANDLING LOGIC
-router.post("/register", function(req, res){
+router.post("/register", (req, res) => { 
     var newUser = new User({username: req.body.username});
-    User.register(newUser, req.body.password, function(err, user){
+    User.register(newUser, req.body.password, (err, user) => { 
         if(err){
             console.log(err);
             return res.render("register");
         }
-        passport.authenticate("local")(req, res, function(){
+        passport.authenticate("local")(req, res, () => {
             console.log(user);
            res.redirect("/campgrounds"); 
         });

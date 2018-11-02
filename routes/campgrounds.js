@@ -49,13 +49,27 @@ router.get("/:id", (req, res) => {
 
 // PUT : API/CAMPGROUNDS/:ID
 router.put("/:id", (req, res) => {
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
-        if(err){
-            res.redirect("/campgrounds");
-        } else {
-            res.redirect("/campgrounds/" + req.params.id);
-        }
-    })
+    // Is This User Logged In?
+    if(req.isAuthenticated()){
+        Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
+            if(err){
+                res.redirect("/campgrounds");
+            } else {
+                // Does this User Own This Campground?
+                if(updatedCampground.author._id.equals(req.user._id)){
+                    res.redirect("/campgrounds/" + req.params.id);
+                } else {
+                    res.send('YOU DO NOT HAVE PERMISSION TO DO THAT');
+                }
+               
+            }
+        });
+    } else {
+        res.send('You need to Log in to Post A Campsite')
+    }
+    
+    // Otherwise/if not, redirect
+    
 })
 
 router.delete("/:id", (req, res) => {
@@ -73,6 +87,23 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkCampgroundOwnership(req, res, next){
+    if(req.isAuthenticated()){
+        Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
+            if(err){
+                res.redirect("back");
+            } else {
+                // Does this User Own This Campground?
+                if(updatedCampground.author._id.equals(req.user._id)){
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } 
 }
 
 module.exports = router;

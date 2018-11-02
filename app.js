@@ -1,15 +1,15 @@
-const express       = require("express"),
-      app           = express(),
-      bodyParser    = require("body-parser"),
-      mongoose      = require('mongoose'),
-      PORT          = 3000,
-      passport      = require("passport"),
+const express        = require("express"),
+      app            = express(),
+      bodyParser     = require("body-parser"),
+      mongoose       = require('mongoose'),
+      PORT           = 3000,
+      passport       = require("passport"),
       methodOverride = require("method-override"),
-      localStrategy = require("passport-local"),
-      User          = require("./models/user"),
-      Campground    = require("./models/campground"),
-      Comment       = require("./models/comment"),
-      seedDB        = require("./seeds");
+      localStrategy  = require("passport-local"),
+      User           = require("./models/user"),
+      Campground     = require("./models/campground"),
+      Comment        = require("./models/comment"),
+      seedDB         = require("./seeds");
 
 // REQUIRE ROUTES
 const campgroundRoute = require("./routes/campgrounds"),
