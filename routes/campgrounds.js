@@ -48,31 +48,17 @@ router.get("/:id", (req, res) => {
 });
 
 // PUT : API/CAMPGROUNDS/:ID
-router.put("/:id", (req, res) => {
-    // Is This User Logged In?
-    if(req.isAuthenticated()){
+router.put("/:id", checkCampgroundOwnership, (req, res) => {
         Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
             if(err){
                 res.redirect("/campgrounds");
             } else {
-                // Does this User Own This Campground?
-                if(updatedCampground.author._id.equals(req.user._id)){
-                    res.redirect("/campgrounds/" + req.params.id);
-                } else {
-                    res.send('YOU DO NOT HAVE PERMISSION TO DO THAT');
-                }
-               
+                res.redirect("/campgrounds/" + req.params.id);
             }
         });
-    } else {
-        res.send('You need to Log in to Post A Campsite')
-    }
-    
-    // Otherwise/if not, redirect
-    
-})
+});
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", checkCampgroundOwnership , (req, res) => {
     Campground.findByIdAndRemove(req.params.id, (err) => {
         if(err){
             res.redirect("/");
@@ -89,21 +75,23 @@ function isLoggedIn(req, res, next) {
     res.redirect("/login");
 }
 
-function checkCampgroundOwnership(req, res, next){
+function checkCampgroundOwnership(req, res, next) {
     if(req.isAuthenticated()){
-        Campground.findByIdAndUpdate(req.params.id, req.body.campground , (err, updatedCampground) => {
-            if(err){
-                res.redirect("back");
-            } else {
-                // Does this User Own This Campground?
-                if(updatedCampground.author._id.equals(req.user._id)){
-                    next();
-                } else {
-                    res.redirect("back");
-                }
-            }
-        });
-    } 
-}
+           Campground.findById(req.params.id, function(err, foundCampground){
+              if(err){
+                  res.redirect("back");
+              }  else {
+                  // does user own the campground?
+               if(foundCampground.author.id.equals(req.user._id)) {
+                   next();
+               } else {
+                   res.redirect("back");
+               }
+              }
+           });
+       } else {
+           res.redirect("back");
+       }
+   }
 
 module.exports = router;
