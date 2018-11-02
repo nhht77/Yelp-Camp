@@ -41,15 +41,15 @@ router.put("/:comment_id", (req, res) => {
  
  // COMMENT DESTROY ROUTE
  router.delete("/:comment_id", (req, res) => {
-     //findByIdAndRemove
-     Comment.findByIdAndRemove(req.params.comment_id, err => {
-        if(err){
-            res.redirect("back");
-        } else {
-            res.redirect("/campgrounds/" + req.params.id);
-        }
-     });
- });
+    //findByIdAndRemove
+    Comment.findByIdAndRemove(req.params.comment_id, err => {
+       if(err){
+           res.redirect("back");
+       } else {
+           res.redirect("/campgrounds/" + req.params.id);
+       }
+    });
+});
 
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
