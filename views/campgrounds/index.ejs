@@ -1,37 +1,51 @@
 <% include ../partials/header %>
- <div class="container">
-     <header class="jumbotron">
-         <div class="container">
-             <h1>Welcome To YelpCamp!</h1>
-             <p>View our hand-picked campgrounds from all over the world</p>
-             <% if(currentUser){ %>
-             <p>
-                <button type="button" class="btn btn-primary btn-large" data-toggle="modal" data-target="#addCampground">Add New Campground</button>
-             </p>
-             <% } %>
-         </div>
-     </header>
-     
-     <div class="album py-5 bg-light">
-        <div class="container d-flex flex-wrap align-items-stretch">
-            <% campgrounds.forEach(campground => { %>
-            <div class="col-md-4">
-                <div class="card mb-4 box-shadow">
-                    <img class="card-img-top" src="<%= campground.image %>" alt="Card image cap">
-                    <div class="card-body">
-                    <p class="card-text"><%= campground.name %></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a class="btn btn-sm btn-outline-primary" href="/campgrounds/<%= campground._id %>">View</a>
-                            </div>
-                    </div>
-                    </div>
-                </div>
+<div class="container">
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Welcome To YelpCamp!</h1>
+      <p>View our hand-picked campgrounds from all over the world</p>
+      <% if(currentUser){ %>
+      <p>
+        <button
+          type="button"
+          class="btn btn-primary btn-large"
+          data-toggle="modal"
+          data-target="#addCampground"
+        >
+          Add New Campground
+        </button>
+      </p>
+      <% } %>
+    </div>
+  </header>
+
+  <div class="album py-5 bg-light">
+    <div class="container d-flex flex-wrap align-items-stretch">
+      <% campgrounds.forEach(campground => { %>
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <img
+            class="card-img-top"
+            src="<%= campground.image %>"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <p class="card-text"><%= campground.name %></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a
+                  class="btn btn-sm btn-outline-primary"
+                  href="/campgrounds/<%= campground._id %>"
+                  >View</a
+                >
+              </div>
             </div>
-            <% }); %>
+          </div>
         </div>
-    </div>           
+      </div>
+      <% }); %>
+    </div>
+  </div>
 </div>
 
-<% include ../partials/footer %>
-<% include ../modals/addCampground.ejs %>
+<% include ../partials/footer %> <% include ../modals/addCampground.ejs %>
