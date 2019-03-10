@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.6rem;
+}
+h3 {
+  font-size: 1.3rem;
+}
+h4 {
+  font-size: 1.1rem;
+}
+h5 {
+  font-size: 0.9rem;
+}
+.text-green {
+  color: #43eb75;
+}
+/*Navbar*/
+
+#navigation-bar {
+  height: 80px;
+}
+.flex-container {
+  display: flex;
+  height: 80px;
+  margin: auto;
+}
+.flex-container h1,
+.flex-container .nav-links {
+  align-self: center;
+  padding: 0 1rem;
+}
+
+.navigation-logo {
+  background-color: #43eb75;
+  width: 95px;
+  height: 170px;
+  display: flex;
+  justify-content: center;
+  z-index: 3;
+}
+
+#navigation-bar img {
+  width: 75px;
+}
+/*Jumbo*/
+
+.jumbo {
+  height: calc(100vh - 80px);
+  background: url(../img/glen-jackson-242973-unsplash.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.jumbo .container {
+  display: grid;
+  grid-template-columns: 0.5fr;
+  grid-template-rows: 1fr;
+}
+
+.jumbo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.jumbo-content {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  position: relative;
+}
+
+.jumbo-content > * {
+  z-index: 4;
+}
+
+.jumbo-content::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 3;
+}
