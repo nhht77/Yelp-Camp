@@ -6,13 +6,28 @@ const router        = require('express').Router(),
 
 //GET ALL : API/Index
 router.get("/", (req, res) => {
-    Campground.find({}, (err, allCampground) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res. render("campgrounds/index", {campgrounds : allCampground});
-        }
-    })
+
+    let isMatch = null;
+
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Campground.find({name: regex}, (err, campgrounds) => {
+            if (err) throw err;
+            if(campgrounds.length < 1){
+                isMatch = "There is no matching campground, please try again!"
+            }
+            res.render("campgrounds/index", {campgrounds, isMatch});
+        })
+    }
+    else {
+        Campground.find({}, (err, campgrounds) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("campgrounds/index", {campgrounds, isMatch});
+            }
+        })
+    }
 });
 
 //POST : API/CAMPGROUNDS
@@ -68,5 +83,9 @@ router.delete("/:id", middleware.checkCampgroundOwnership , (req, res) => {
         }
     })
 })
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

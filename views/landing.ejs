@@ -84,9 +84,15 @@
             <h1>Landing Page!</h1>
             <h3>Welcome to YelpCamp</h3>
             <hr />
-            <a href="/campgrounds" class="btn btn-warning btn-lg"
-              ><i class="far fa-compass"></i> Get Started!</a
-            >
+            <a href="/campgrounds" class="btn btn-warning btn-lg">
+              <i class="far fa-compass"></i> Get Started!
+            </a>
+            <form action="/campgrounds" method="GET" class="form-inline">
+              <div class="form-group">
+                  <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                  <input type="submit" value="search" class="btn btn-default">
+              </div>
+            </form>
           </div>
         </div>
       </div>

@@ -19,6 +19,20 @@
     </div>
   </header>
 
+  <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+    <div class="col-md-12">
+    <% if(isMatch !== null) { %>
+      <h3><%= isMatch %></h3>
+      <form action="/campgrounds" method="GET" class="form-inline">
+        <div class="form-group">
+          <input type="text" name="search" placeholder="Campground search..." class="form-control">
+          <input type="submit" value="search" class="btn btn-default">
+        </div>
+      </form>
+    <% } %>
+    </div>
+  </div>
+
   <div class="album py-5 bg-light">
     <div class="container d-flex flex-wrap align-items-stretch">
       <% campgrounds.forEach(campground => { %>
