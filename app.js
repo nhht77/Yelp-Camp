@@ -14,6 +14,8 @@ const express    = require("express"),
   // Comment = require("./models/comment"),
   // seedDB = require("./seeds");
 
+  app.locals.moment = require('moment');
+
 // REQUIRE ROUTES
 const campgroundRoute = require("./routes/campgrounds"),
   commentRoute = require("./routes/comments"),
