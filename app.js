@@ -1,17 +1,18 @@
 require("dotenv").config();
 
-const express = require("express"),
-  app = express(),
-  bodyParser = require("body-parser"),
-  mongoose = require("mongoose"),
-  PORT = 3000,
-  passport = require("passport"),
+const express    = require("express"),
+  app            = express(),
+  bodyParser     = require("body-parser"),
+  mongoose       = require("mongoose"),
+  PORT           = 3000,
+  passport       = require("passport"),
   methodOverride = require("method-override"),
-  localStrategy = require("passport-local"),
-  User = require("./models/user"),
-  Campground = require("./models/campground"),
-  Comment = require("./models/comment"),
-  seedDB = require("./seeds");
+  localStrategy  = require("passport-local"),
+  User           = require("./models/user"),
+  flash          = require("connect-flash");
+  // Campground     = require("./models/campground"),
+  // Comment = require("./models/comment"),
+  // seedDB = require("./seeds");
 
 // REQUIRE ROUTES
 const campgroundRoute = require("./routes/campgrounds"),
@@ -34,6 +35,8 @@ app.use(
     saveUninitialized: false
   })
 );
+
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
@@ -42,6 +45,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   next();
 });
 
