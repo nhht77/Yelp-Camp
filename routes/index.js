@@ -20,17 +20,18 @@ router.get('/register', (req, res) => {
 
 // POST API/register --- HANDLING LOGIC
 router.post("/register", (req, res) => { 
-    var newUser = new User({username: req.body.username});
+    let {username, password, email, firstname, lastname} = req.body;
+    let newUser = new User({username, password, email, firstname, lastname});
     if(req.body.adminCode === "potato123"){
         newUser.isAdmin = true;
     }
     User.register(newUser, req.body.password, (err, user) => { 
         if(err){
             console.log(err);
-            return res.render("register");
+            return res.render("register", {error: err.message});
         }
         passport.authenticate("local")(req, res, () => {
-           console.log(user);
+           req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
            res.redirect("/campgrounds"); 
         });
     });
@@ -42,12 +43,19 @@ router.get("/login", (req, res) => {
 })
 
 // POST API/login
-router.post("/login", passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/campgrounds' }) ,(req, res) =>{
+router.post("/login", passport.authenticate('local', 
+    { 
+        failureRedirect: '/login', 
+        successRedirect: '/campgrounds',
+        failureFlash: true,
+        successFlash: 'Welcome to YelpCamp!'
+    }) ,(req, res) =>{
 });
 
 // Logout Logic
 router.get("/logout", (req, res) => {
     req.logout();
+    req.flash("success", "See you later!");
     res.redirect("/");
 })
 
@@ -90,14 +98,15 @@ router.post("/forgot", async (req, res, next) => {
         }
 
         smtpTransport.sendMail(mailOptions, () => {
-            console.log("Email is sent.");
+            console.log('An e-mail has been sent to ' + user.email + ' with further instructions.');
             req.flash("success", 'An e-mail has been sent to ' + user.email + ' with further instructions.')
         })
     } 
     
     catch(err)
     {
-        throw err
+        res.redirect("/forgot");
+        throw err;
     }
     
 })
