@@ -33,14 +33,12 @@ router.get("/", (req, res) => {
 //POST : API/CAMPGROUNDS
 router.post("/", middleware.isLoggedIn, (req, res) => {
     // get data from form and add to campgrounds db
-    var name = req.body.name;
-        image = req.body.image,
-        description = req.body.description,
+    let {name, image, description, cost} = req.body,
         author = {
             id: req.user._id,
             username: req.user.username
         },
-        newCampground = {name: name, image: image, description: description, author: author};
+        newCampground = {name , image, description, cost, author};
 
     Campground.create( newCampground, err => {
         if(err){
