@@ -40,7 +40,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/"
-              >Signed in As <%= currentUser.firstname && currentUser.firstname > 0 ? currentUser.firstname : currentUser.username %></a
+              >Signed in As <%= currentUser.firstName && currentUser.firstName.length > 0 ? currentUser.firstName : currentUser.username %></a
             >
           </li>
           <% } %>

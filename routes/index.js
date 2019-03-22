@@ -2,6 +2,7 @@ const router      = require('express').Router(),
       passport    = require('passport'),
       User        = require('../models/user'),
       nodemailer  = require("nodemailer"),
+      Campground = require('../models/campground'),
       crypto      = require("crypto");
 
 
@@ -15,20 +16,20 @@ router.get("/", (req, res) => {
 
 // GET API/register
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('auth/register');
 })
 
 // POST API/register --- HANDLING LOGIC
 router.post("/register", (req, res) => { 
-    let {username, password, email, firstname, lastname} = req.body;
-    let newUser = new User({username, password, email, firstname, lastname});
+    let {username, password, email, firstName, lastName, avatar} = req.body;
+    let newUser = new User({username, password, email, firstName, lastName, avatar});
     if(req.body.adminCode === "potato123"){
         newUser.isAdmin = true;
     }
     User.register(newUser, req.body.password, (err, user) => { 
         if(err){
             console.log(err);
-            return res.render("register", {error: err.message});
+            return res.render("auth/register", {error: err.message});
         }
         passport.authenticate("local")(req, res, () => {
            req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
@@ -39,7 +40,7 @@ router.post("/register", (req, res) => {
 
 //GET API/login
 router.get("/login", (req, res) => {
-    res.render('login');
+    res.render('auth/login');
 })
 
 // POST API/login
@@ -61,8 +62,27 @@ router.get("/logout", (req, res) => {
 
 // Forgot password
 router.get('/forgot', (req, res) => {
-    res.render('forgot');
+    res.render('auth/forgot');
 });
+
+// USER PROFILE
+
+router.get("/users/:id", (req, res) => {
+    User.findById(req.params.id, (err, user) => {
+        if(err){
+            req.flash("error", "Something went wrong!");
+            return res.redirect("/");
+        }
+        Campground.find().where('author.id').equals(user._id).exec( (err, campgrounds) => {
+            if(err){
+                req.flash("error", "Something went wrong!");
+                return res.redirect("/");
+            }
+            res.render("auth/show", {user, campgrounds})
+        })
+
+    })
+})
 
 router.post("/forgot", async (req, res, next) => {
     try
