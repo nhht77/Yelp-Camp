@@ -60,11 +60,6 @@ router.get("/logout", (req, res) => {
     res.redirect("/");
 })
 
-// Forgot password
-router.get('/forgot', (req, res) => {
-    res.render('auth/forgot');
-});
-
 // USER PROFILE
 
 router.get("/users/:id", (req, res) => {
@@ -84,22 +79,29 @@ router.get("/users/:id", (req, res) => {
     })
 })
 
+// Forgot password
+router.get('/forgot', (req, res) => {
+    res.render('auth/forgot');
+});
+
 router.post("/forgot", async (req, res, next) => {
     try
     {
-        let token = await crypto.randomBytes(20, buff => JSON.stringify(buff));
-        let user  = await User.findOne({email: req.body.email}, user => {
+        let token = await crypto.randomBytes(20).toString('hex');
+        let user  = await User.findOne({email: req.body.email})
             if(!user) {
+                console.log(req.body.email)
                 req.flash("error", "No account with that email exits.");
                 return res.redirect("/forgot");
             }
-            user.resetPasswordToken   = token;
-            user.resetPasswordExpired = Date.now() + 3600000; //1 hour
-            
-            return user;
-        })
+        user.resetPasswordToken   = token;
+        user.resetPasswordExpired = Date.now() + 3600000; //1 hour
 
-        let smtpTransport = nodemailer.createTransport({
+        console.log(user.resetPasswordExpired);
+        console.log(token);
+        console.log(user);
+
+        let smtpTransport = await nodemailer.createTransport({
             service: "Gmail",
             auth: {
                 user:"nhht77@gmail.com",
@@ -120,6 +122,7 @@ router.post("/forgot", async (req, res, next) => {
         smtpTransport.sendMail(mailOptions, () => {
             console.log('An e-mail has been sent to ' + user.email + ' with further instructions.');
             req.flash("success", 'An e-mail has been sent to ' + user.email + ' with further instructions.')
+            return res.redirect('/campgrounds')
         })
     } 
     
@@ -130,6 +133,21 @@ router.post("/forgot", async (req, res, next) => {
     }
     
 })
+
+
+// Reset Password 
+
+router.get('/reset/:token', async (req, res) => {
+    const user = await User.find({resetPasswordToken: req.params.token});
+    User.find({resetPasswordToken: req.params.token}, userToken => console.log(userToken));
+    if(!user) {
+        req.flash('error', "Password reset token is invalid or has expired")
+        return res.redirect("/forgot");
+    }
+    res.render('auth/reset', {token: req.params.token});
+})
+
+
 
 
 function isLoggedIn(req, res, next) {
