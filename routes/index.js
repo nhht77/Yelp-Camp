@@ -139,7 +139,7 @@ router.post("/forgot", async (req, res, next) => {
 
 router.get('/reset/:token', async (req, res) => {
     const user = await User.find({resetPasswordToken: req.params.token});
-    User.find({resetPasswordToken: req.params.token}, userToken => console.log(userToken));
+    if(!user) console.log("No User");
     if(!user) {
         req.flash('error', "Password reset token is invalid or has expired")
         return res.redirect("/forgot");
@@ -147,8 +147,55 @@ router.get('/reset/:token', async (req, res) => {
     res.render('auth/reset', {token: req.params.token});
 })
 
-
-
+router.post('/reset/:token', async (req, res) => {
+    try {
+            const user = await User.find({resetPasswordToken: req.params.token});
+    
+        if(!user){
+            req.flash('error', 'Password reset token is invalid or has expired.');
+            return res.redirect('back');
+        }
+    
+        if(req.body.password === req.body.confirm){
+            await user.setPassword(req.body.password);
+            user.resetPasswordToken   = undefined;
+            user.resetPasswordExpired = undefined;
+    
+            const newUser = await user.save();
+            req.logIn(newUser);
+        } else {
+            req.flash("error", "Passwords do not match.");
+            return res.redirect('back');
+        }
+    
+        let smtpTransport = await nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user:"nhht77@gmail.com",
+                pass:process.env.GMAIL_PW
+            }
+        })
+    
+        console.log(user.email);
+    
+        let mailOptions = {
+            to: user.email,
+            from: 'nhht77@gmail.com',
+            subject: 'Your password has been changed',
+            text: 'Hello,\n\n' +
+            'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+        }
+    
+        smtpTransport.sendMail(mailOptions, () => {
+            console.log('An e-mail has been sent to ' + user.email + ' with further instructions.');
+            req.flash("success", 'An e-mail has been sent to ' + user.email + ' with further instructions.')
+            return res.redirect('/campgrounds')
+        })
+    } catch (error) {
+        console.log(error);
+        res.redirect('/campgrounds');
+    }
+})
 
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
