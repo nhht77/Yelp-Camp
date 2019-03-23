@@ -49,4 +49,31 @@ middlewareObj.isLoggedIn = (req, res, next)=>{
     res.redirect("/login");
 }
 
+middlewareObj.checkReviewExistence = async (req, res, next) => {
+    try {
+        if(req.isAuthenticated){
+            const campground = await Campground.findById(req.params.id).populate("reviews")
+            if (!campground) {
+                req.flash("error", "Campground not found.");
+                res.redirect("back");
+            }
+            else {
+                let reviewUser = await campground.reviews.some( r => r.author.id.equals(req.user._id));
+                if(reviewUser){
+                    req.flash("error", "You already wrote a review.");
+                    return res.redirect("/campgrounds/" + campground._id);
+                }
+                next();
+            }
+        }
+        else {
+            req.flash("error", "You need to login first.");
+            res.redirect("back");
+        }
+    } catch (error) {
+        req.flash("error", error.message);
+        res.redirect("back");
+    }
+}
+
 module.exports = middlewareObj;
